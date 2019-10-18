@@ -1,9 +1,28 @@
-var express = require('express');
-var router = express.Router();
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var uniqueValidator = require('mongoose-unique-validator');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+//Create a schema
+var Users = new Schema({
+  email: {
+    type: String,
+    required: [true, 'Please enter an email'],
+    unique: [true, 'Email must be unique']
+  },
+  username: {
+    type: String,
+    required: [true, 'Please enter a username'],
+    unique: [true, 'Usernames must be unique']
+  },
+  first_name: String,
+  last_name: String,
+  admin: {
+    type: Boolean,
+    default: false
+  }
 });
 
-module.exports = router;
+//Add unique validation properties to the model
+Users.plugin(uniqueValidator);
+
+module.exports  = mongoose.model('Users', Users);
