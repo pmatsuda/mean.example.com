@@ -74,17 +74,6 @@ app.use(function(req,res,next){
   next();
 });
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/api/users', apiUsersRouter);
-app.use('/api/auth', apiAuthRouter);
-app.use('/auth', authRouter);
-
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
-
 //Session-based access control
 app.use(function (req, res, next) {
   //Uncomment the following line to allow access to everything.
@@ -131,6 +120,19 @@ app.use(function (req, res, next) {
   //Redirect the user to the login screen.
   return res.redirect('/auth#login');
 });
+
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/api/users', apiUsersRouter);
+app.use('/api/auth', apiAuthRouter);
+app.use('/auth', authRouter);
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404));
+});
+
+
 
 // error handler
 app.use(function (err, req, res, next) {
