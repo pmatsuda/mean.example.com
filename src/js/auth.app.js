@@ -1,8 +1,9 @@
 var authApp = (function () {
-    function loginForm() {
-        let app = document.getElementById('app');
+  
+  function loginForm() {
+    let app = document.getElementById('app');
 
-        let form = `
+    let form = `
         <div class="card login-form">
           <form id="loginForm" class="card-body">
             <h1 class="card-title text-center">Please Sign In</h1>
@@ -22,13 +23,13 @@ var authApp = (function () {
         </div>
       `;
 
-        app.innerHTML = form;
-    }
+    app.innerHTML = form;
+  }
 
-    function registrationForm() {
-        var app = document.getElementById('app');
+  function registrationForm() {
+    var app = document.getElementById('app');
 
-        var form = `
+    var form = `
     
             <div class="card login-form">
               <form id="registrationForm" class="card-body">
@@ -72,80 +73,84 @@ var authApp = (function () {
             </div>
         `;
 
-        app.innerHTML = form;
-    }
+    app.innerHTML = form;
+  }
 
-    function postRequest(formId, url) {
-        let form = document.getElementById(formId);
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
+  function postRequest(formId, url) {
+    let form = document.getElementById(formId);
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
 
-            let formData = new FormData(form);
-            let uri = `${window.location.origin}${url}`;
-            let xhr = new XMLHttpRequest();
-            xhr.open('POST', uri);
+      let formData = new FormData(form);
+      let uri = `${window.location.origin}${url}`;
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST', uri);
 
-            xhr.setRequestHeader(
-                'Content-Type',
-                'application/json; charset=UTF-8'
-            );
+      xhr.setRequestHeader(
+        'Content-Type',
+        'application/json; charset=UTF-8'
+      );
 
-            let object = {};
-            formData.forEach(function (value, key) {
-                object[key] = value;
-            });
+      let object = {};
+      formData.forEach(function (value, key) {
+        object[key] = value;
+      });
 
-            xhr.send(JSON.stringify(object));
-            xhr.onload = function () {
-                let data = JSON.parse(xhr.response);
-                console.log(data);
-            }
-        });
-    }
-
-    return {
-        load: function () {
-            switch (window.location.hash) {
-                case '#register':
-                    registrationForm();
-                    postRequest('registrationForm', '/api/auth/register');
-                    validate.registrationForm();
-                    break;
-
-                default:
-                    loginForm();
-                    postRequest('loginForm', '/api/auth/login');
-                    break;
-            }
+      xhr.send(JSON.stringify(object));
+      xhr.onload = function () {
+        let data = JSON.parse(xhr.response);
+        console.log(data);
+        if (data.success === true) {
+          window.location.href = '/';
+        } else {
+          document.getElementById('formMsg').style.display = 'block';
         }
+      });
+  }
+
+  return {
+    load: function () {
+      switch (window.location.hash) {
+        case '#register':
+          registrationForm();
+          postRequest('registrationForm', '/api/auth/register');
+          validate.registrationForm();
+          break;
+
+        default:
+          loginForm();
+          postRequest('loginForm', '/api/auth/login');
+          break;
+      }
     }
+  }
 })();
 
 var validate = (function () {
-    function confirmPasswordMatch() {
-        let pw = document.getElementById('password');
-        let cpw = document.getElementById('confirm_password');
+  function confirmPasswordMatch() {
+    let pw = document.getElementById('password');
+    let cpw = document.getElementById('confirm_password');
 
-        if (pw.value !== cpw.value) {
-            cpw.setCustomValidity("Passwords do not match");
-        } else {
-            cpw.setCustomValidity("");
-        }
+    if (pw.value !== cpw.value) {
+      cpw.setCustomValidity("Passwords do not match");
+    } else {
+      cpw.setCustomValidity("");
     }
+  }
 
-    return {
-        registrationForm: function () {
-            document.querySelector('#registrationForm input[type="submit"]').addEventListener(
-                'click',
-                function () {
-                    confirmPasswordMatch();
-                });
-        }
+  return {
+    registrationForm: function () {
+      document.querySelector('#registrationForm input[type="submit"]').addEventListener(
+        'click',
+        function () {
+          confirmPasswordMatch();
+        });
     }
+  }
 })();
 
 authApp.load();
 
-window.addEventListener("hashchange", function(){
-    authApp.load();
-  });
+window.addEventListener("hashchange", function () {
+  authApp.load();
+});
