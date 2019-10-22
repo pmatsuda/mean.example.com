@@ -30,9 +30,7 @@ router.post('/register', function(req,res,next){
       success: true,
       user: user
     });
-
   });
-
 });
 
 router.post('/login', function(req, res, next) {
@@ -47,8 +45,7 @@ router.post('/login', function(req, res, next) {
         return res.json({success:false, error: info.message });
       }
   
-      req.logIn(user, function(err) {
-  
+      req.logIn(user, function(err) {  
         if (err) { 
           return res.json({success:false, error: err });
         }
@@ -62,24 +59,13 @@ router.post('/login', function(req, res, next) {
     })(req, res, next);
   });
 
-  router.delete('/:userId', function(req,res){
-
-    var userId = req.params.userId;
-  
-    Users.remove({'_id':userId}, function(err,removed){
-  
-      if(err){
-        return res.json({success: false, error: err});
-      }
-  
-      return res.json({success: true, status: removed});
-  
-    });
-  
-  });
-
-  router.get('/logout', function(req, res){
+  router.delete('/logout', function(req, res){
     req.logout();
+    if(!req.session.passport.user){
+      return res.json({success: 'true'});
+    }else{
+      return res.json({success: 'false'});
+    }
   });
 
 module.exports = router;
