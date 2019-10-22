@@ -20,9 +20,11 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
           a.nav-link(href='/')
             | Home 
             span.sr-only (current)
-        li.nav-item
-          a.nav-link(href='/auth#register') Register
-        li.nav-item
-          a.nav-link(href='/auth#login') Login
-        li.nav-item
-          a.nav-link(href='/auth/logout') Logout
+        if !session.passport.user
+          li.nav-item
+            a.nav-link(href='/auth#register') Register
+          li.nav-item
+            a.nav-link(href='/auth#login') Login
+        else
+          li.nav-item
+            a.nav-link(href='/auth/logout') Logout
