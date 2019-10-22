@@ -1,5 +1,4 @@
 var authApp = (function () {
-
     function loginForm() {
         let app = document.getElementById('app');
 
@@ -106,11 +105,47 @@ var authApp = (function () {
 
     return {
         load: function () {
-            registrationForm();
-            postRequest('registrationForm', '/api/auth/register');
+            switch (window.location.hash) {
+                case '#register':
+                    registrationForm();
+                    postRequest('registrationForm', '/api/auth/register');
+                    validate.registrationForm();
+                    break;
+
+                default:
+                    loginForm();
+                    postRequest('loginForm', '/api/auth/login');
+                    break;
+            }
+        }
+    }
+})();
+
+var validate = (function () {
+    function confirmPasswordMatch() {
+        let pw = document.getElementById('password');
+        let cpw = document.getElementById('confirm_password');
+
+        if (pw.value !== cpw.value) {
+            cpw.setCustomValidity("Passwords do not match");
+        } else {
+            cpw.setCustomValidity("");
         }
     }
 
+    return {
+        registrationForm: function () {
+            document.querySelector('#registrationForm input[type="submit"]').addEventListener(
+                'click',
+                function () {
+                    confirmPasswordMatch();
+                });
+        }
+    }
 })();
 
 authApp.load();
+
+window.addEventListener("hashchange", function(){
+    authApp.load();
+  });
