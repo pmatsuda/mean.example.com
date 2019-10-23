@@ -11,6 +11,18 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.get('/:userId', function(req,res){
+  
+  var userId = req.params.userId;
+
+  Users.findOne({'_id':userId}, function(err, user){
+    if(err){
+      return res.json({'success':false, 'error': err});
+    }
+    return res.json({'success':true, 'user': user});
+  });
+});
+
 router.post('/', function(req, res) {
   Users.create(new Users({
     username: req.body.username,
@@ -63,11 +75,8 @@ router.put('/', function(req, res){
         return res.json({success: true, user:user});
       }
     });
-
    }
-
-  });
-  
+  });  
 });
 
 router.delete('/:userId', function(req,res){

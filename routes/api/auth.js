@@ -13,7 +13,9 @@ router.post('/register', function(req,res,next){
     first_name: data.first_name,
     last_name: data.last_name
   }), 
+
   data.password, 
+
   function(err, user){
 
     if(err){
@@ -22,8 +24,7 @@ router.post('/register', function(req,res,next){
         success: false, 
         user: req.body, 
         errors: err
-      });
-      
+      });      
     }
 
     return res.json({

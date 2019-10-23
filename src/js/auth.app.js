@@ -106,10 +106,6 @@ var authApp = (function () {
 
   return {
     load: function () {
-      registrationForm();
-      postRequest('registrationForm', '/api/auth/register');
-      validate.registrationForm();
-
       switch (window.location.hash) {
         case '#register':
           registrationForm();
@@ -127,7 +123,7 @@ var authApp = (function () {
 })();
 
 var validate = (function () {
-  
+
   function confirmPasswordMatch() {
     let pw = document.getElementById('password');
     let cpw = document.getElementById('confirm_password');
