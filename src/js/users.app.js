@@ -58,6 +58,7 @@ var usersApp = (function () {
       //Append the HTML to the #app
       app.innerHTML = table;
     }
+  }
 
     function createUser(){
       var app = document.getElementById('app');
@@ -141,12 +142,7 @@ var usersApp = (function () {
         }
       });
     }
-    // xhr.onload = function () {
-    //   let data = JSON.parse(xhr.response);
-    //   console.log(data);
-    // }
-  }
-
+  
   return {
     load: function(){
       //viewUsers();
