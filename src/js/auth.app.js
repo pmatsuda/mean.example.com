@@ -1,5 +1,5 @@
 var authApp = (function () {
-  
+
   function loginForm() {
     let app = document.getElementById('app');
 
@@ -76,40 +76,40 @@ var authApp = (function () {
     app.innerHTML = form;
   }
 
-  function postRequest(formId, url) {
+  function postRequest(formId, url){
     let form = document.getElementById(formId);
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', function(e){
       e.preventDefault();
-
+  
       let formData = new FormData(form);
       let uri = `${window.location.origin}${url}`;
       let xhr = new XMLHttpRequest();
       xhr.open('POST', uri);
-
+  
       xhr.setRequestHeader(
         'Content-Type',
         'application/json; charset=UTF-8'
       );
-
+  
       let object = {};
-      formData.forEach(function (value, key) {
-        object[key] = value;
+      formData.forEach(function(value, key){
+        object[key]=value;
       });
-
+  
       xhr.send(JSON.stringify(object));
-      xhr.onload = function () {
+      xhr.onload = function(){
         let data = JSON.parse(xhr.response);
         console.log(data);
-        if (data.success === true) {
-          window.location.href = '/';
-        } else {
-          document.getElementById('formMsg').style.display = 'block';
-        }
-      });
+      }
+    });
   }
 
   return {
     load: function () {
+      registrationForm();
+      postRequest('registrationForm', '/api/auth/register');
+      validate.registrationForm();
+
       switch (window.location.hash) {
         case '#register':
           registrationForm();
@@ -127,6 +127,7 @@ var authApp = (function () {
 })();
 
 var validate = (function () {
+  
   function confirmPasswordMatch() {
     let pw = document.getElementById('password');
     let cpw = document.getElementById('confirm_password');
