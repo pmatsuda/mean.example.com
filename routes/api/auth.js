@@ -51,7 +51,7 @@ router.post('/login', function(req, res, next) {
           return res.json({success:false, error: err });
         }
   
-        //we will use a console.log() to test the session data
+        //use a console.log() to test the session data
         console.log(req.session);
   
         return res.json({success:true, user: user });

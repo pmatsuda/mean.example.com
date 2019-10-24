@@ -20,8 +20,7 @@ var usersApp = (function () {
       let table = '';
       let rows = '';
 
-      //Loop each user record into it's own HTML table row, each user should
-      //have a link a user view
+      //Loop each user record into it's own HTML table row, each user should have a link a user view
       for (let i = 0; i < users.length; i++) {
         rows = rows + `<tr>
           <td>
@@ -32,8 +31,7 @@ var usersApp = (function () {
         </tr>`;
       }
 
-      //Create a users panel, add a table to the panel, inject the rows into the
-      //table
+      //Create a users panel, add a table to the panel, inject the rows into the table
       table = `<div class="card">
         <div class="card-header clearfix">
           <h2 class="h3 float-left">Users</h2>
@@ -109,6 +107,7 @@ var usersApp = (function () {
       `;
 
     app.innerHTML = form;
+    processRequest('createUser', '/api/users', 'POST');
   }
 
   function viewUser(id) {
@@ -240,7 +239,7 @@ var usersApp = (function () {
       xhr.onload = function () {
         let data = JSON.parse(xhr.response);
         if (data.success === true) {
-          window.location.href = '/';
+          window.location.href = '/users/app';
         } else {
           document.getElementById('formMsg').style.display = 'block';
         }
@@ -327,7 +326,7 @@ var usersApp = (function () {
       switch (hashArray[0]) {
         case '#create':
           createUser();
-          processRequest('createUser', '/api/users', 'POST');
+          //processRequest('createUser', '/api/users', 'POST');
           break;
 
         case '#view':
@@ -347,11 +346,11 @@ var usersApp = (function () {
           break;
       }
     },
-
-    deleteUser: function(id){
-      deleteUser(id);
-    }
   }
 })();
 
 usersApp.load();
+
+window.addEventListener("hashchange", function () {
+  authApp.load();
+});
