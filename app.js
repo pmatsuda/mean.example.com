@@ -10,10 +10,13 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 var Users = require('./models/users');
+var Articles = require('./models/articles');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var articlesRouter = require('./routes/articles');
 var apiUsersRouter = require('./routes/api/users');
+var apiArticlesRouter = require('./routes/api/articles');
 var apiAuthRouter = require('./routes/api/auth');
 var authRouter = require('./routes/auth');
 
@@ -22,7 +25,7 @@ var app = express();
 var config = require('./config.dev');
 
 //Test the file
-console.log(config);
+//console.log(config);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -82,10 +85,7 @@ app.use(function (req, res, next) {
   //Allow any endpoint that is an exact match. The server does not
   //have access to the hash so /auth and /auth#xxx would bot be considered 
   //exact matches.
-  var whitelist = [
-    '/',
-    '/auth'
-  ];
+  var whitelist = ['/', '/auth', '/articles'];
 
   //req.url holds the current URL
   //indexOf() returns the index of the matching array element
@@ -97,10 +97,7 @@ app.use(function (req, res, next) {
   }
 
   //Allow access to dynamic endpoints
-  var subs = [
-    '/public/',
-    '/api/auth/'
-  ];
+  var subs = ['/public/','/api/auth/','/api/articles/'];
 
   //The query string provides a partial URL match beginning
   //at position 0. Both /api/auth/login and /api/auth/logout would would 
@@ -124,6 +121,8 @@ app.use(function (req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/users', apiUsersRouter);
+app.use('/articles', articlesRouter);
+app.use('/api/articles', apiArticlesRouter);
 app.use('/api/auth', apiAuthRouter);
 app.use('/auth', authRouter);
 
@@ -131,8 +130,6 @@ app.use('/auth', authRouter);
 app.use(function (req, res, next) {
   next(createError(404));
 });
-
-
 
 // error handler
 app.use(function (err, req, res, next) {
