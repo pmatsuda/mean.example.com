@@ -70,10 +70,8 @@ var usersApp = (function () {
               </div>
             </div>
             <div class="card-body">
-              <form id="registrationForm" class="card-body">
               <form id="createUser" class="card-body">
-                <div id="formMsg" class="alert alert-danger text-center">Your form has errors</div>
-    
+                <div id="formMsg" class="alert alert-danger text-center">Your form has errors</div>    
                 <div class="row">
                   <div class="form-group col-md-6">
                     <label for="first_name">First Name</label>
@@ -128,7 +126,7 @@ var usersApp = (function () {
       let data = JSON.parse(xhr.response);
       let card = '';
 
-      card = `<div class="card">
+      form = `<div class="card">
           <div class="card-header clearfix">
             <h2 class="h3 float-left">${data.user.first_name} ${data.user.last_name}</h2>
             <div class="float-right">
@@ -141,7 +139,8 @@ var usersApp = (function () {
           </div>
         </div>`;
 
-      app.innerHTML = card;
+      app.innerHTML = form;
+      processRequest('viewUser', '/api/users', 'POST');
     }
   }
 
@@ -247,25 +246,25 @@ var usersApp = (function () {
     });
   }
 
-  function deleteView(id){
+  function deleteView(id) {
 
     let uri = `${window.location.origin}/api/users/${id}`;
     let xhr = new XMLHttpRequest();
     xhr.open('GET', uri);
-  
+
     xhr.setRequestHeader(
       'Content-Type',
       'application/json; charset=UTF-8'
     );
-  
+
     xhr.send();
-  
-    xhr.onload = function(){
+
+    xhr.onload = function () {
       let app = document.getElementById('app');
       let data = JSON.parse(xhr.response);
       let card = '';
-  
-      card = `<div class="card bg-transparent border-danger text-danger bg-danger">
+
+      form = `<div class="card bg-transparent border-danger text-danger bg-danger">
         <div class="card-header bg-transparent border-danger">
           <h2 class="h3 text-center">Your About to Delete a User</h2>
         </div>
@@ -280,53 +279,52 @@ var usersApp = (function () {
   
           <div class="text-center">
             <br>
-            <a class="btn btn-lg btn-danger text-white">
             <a onclick="usersApp.deleteUser('${data.user._id}');" class="btn btn-lg btn-danger text-white">
-              Yes delete ${data.user.username}
+              Yes, delete ${data.user.username}
             </a>
-            </a>
-          </div>
-  
+          </div>  
         </div>
       </div>`;
-  
-      app.innerHTML = card;
+
+      app.innerHTML = form;
     }
   }
 
-  function deleteUser(id){
+  function deleteUser(id) {
 
     let uri = `${window.location.origin}/api/users/${id}`;
     let xhr = new XMLHttpRequest();
     xhr.open('DELETE', uri);
-  
+
     xhr.setRequestHeader(
       'Content-Type',
       'application/json; charset=UTF-8'
     );
-  
+
     xhr.send();
-  
-    xhr.onload = function(){
+
+    xhr.onload = function () {
       let data = JSON.parse(xhr.response);
-      if(data.success === true){
+      if (data.success === true) {
         window.location.hash = '#';
-      }else{
+      } else {
         alert('Unknown error, the user could not be deleted');
-      }  
-    }  
+      }
+    }
   }
 
   return {
+    deleteUser: function(id){
+      deleteUser(id);
+    },
+
     load: function () {
-      //viewUsers();
       let hash = window.location.hash;
       let hashArray = hash.split('-');
 
       switch (hashArray[0]) {
         case '#create':
           createUser();
-          //processRequest('createUser', '/api/users', 'POST');
           break;
 
         case '#view':
@@ -352,5 +350,5 @@ var usersApp = (function () {
 usersApp.load();
 
 window.addEventListener("hashchange", function () {
-  authApp.load();
+  usersApp.load();
 });

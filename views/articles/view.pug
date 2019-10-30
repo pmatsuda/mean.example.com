@@ -6,3 +6,6 @@ block content
       - var date = new Date(article.published).toISOString().slice(0, 19).replace('T', ' ');
       small Posted: #{date}
     div!= article.body
+
+
+    script(src='/dist/js/articles.app.min.js')
