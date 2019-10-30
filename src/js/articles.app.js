@@ -23,11 +23,16 @@ var articlesApp = (function () {
       //Loop each user record into it's own HTML table row, each user should have a link a user view
       for (let i = 0; i < articles.length; i++) {
         rows = rows + `<tr>
-            <td>
-              <a href="#view-${articles[i]['_id']}">${articles[i]['title']}</a>
-            </td>
-            <td>${articles[i]['published']}</td>
-          </tr>`;
+          <td>
+            <a href="#view-${articles[i]['_id']}">${articles[i]['title']}</a>
+          </td>
+          <td>${articles[i]['description']}</td>
+          <td>`
+          +
+          (articles[i]['published'] ? `${articles[i]['published'].slice(0, 19).replace('T', ' ')}` : `No Publication Date Set`)
+          + `
+          </td>
+        </tr>`;
       }
 
       //Create a articles panel, add a table to the panel, inject the rows into the table
@@ -315,7 +320,7 @@ var articlesApp = (function () {
   }
 
   return {
-    deleteArticle: function(id){
+    deleteArticle: function (id) {
       deleteArticle(id);
     },
 

@@ -18,7 +18,7 @@ router.get('/:id', function (req, res) {
     if (err) {
       return res.json({ 'success': false, 'error': err });
     }
-    return res.json({ 'success': true, 'article': article });
+    return res.json({ 'success': true, 'article': articles });
   });
 });
 
@@ -56,6 +56,7 @@ router.put('/', function (req, res) {
 
       if (data.published) {
         article.published = data.published;
+        article.offset = new Date(data.published).getTimezoneOffset();
       };
 
       if (data.body) {
@@ -64,6 +65,10 @@ router.put('/', function (req, res) {
 
       if (data.keywords) {
         article.keywords = data.keywords;
+      };
+
+      if (data.description) {
+        article.description = data.description;
       };
 
       article.save(function (err) {

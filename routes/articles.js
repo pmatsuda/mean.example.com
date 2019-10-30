@@ -16,9 +16,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/view/:slug', function(req, res, next) {
-  var articleId = req.params.slug;
+  //var articleId = req.params.slug;
 
-  Articles.findOne({ '_id': articleId }, function (err, articles) {
+  Articles.findOne({slug:req.params.slug},function(err, articles){
     if (err) {
       return res.json({ 'success': false, 'error': err });
     }
